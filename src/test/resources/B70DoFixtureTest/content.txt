@@ -1,0 +1,12 @@
+|Import|
+|ru.bedward70.fitnesse.io.test|
+
+INT Example
+
+|!-B70DoFixtureTest-!|
+|show|calculate hash code|Hello|
+|check|calculate hash code|Hello|69609650|
+|saveSymbol|calculate hash code|Hello|$hash-code|
+
+|!-B70DoFixtureTest-!|
+|check|readSymbol|$hash-code|69609650|
