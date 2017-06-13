@@ -24,38 +24,28 @@
  */
 package ru.bedward70.fitnesse.io;
 
-import fit.Fixture;
-import fitlibrary.DoFixture;
-import ru.bedward70.fitnesse.io.traverse.B70DoTraverse;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Properties;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public class B70DoFixture extends DoFixture {
+public class B70PropertyFixture extends B70DoFixture {
 
     /**
-     * Constructor
-     */
-    public B70DoFixture() {
-        setTraverse(new B70DoTraverse(this));
-    }
-
-    /**
-     * Read symbol
+     * Read property
      * @param symbolName symbol name
+     * @param propertyName property name
      * @return an object
      */
-    public Object readSymbol(String symbolName) {
-        return Fixture.getSymbol(symbolName);
-    }
-
-    /**
-     * Read the some string
-     * @param str string
-     * @return an object
-     */
-    public String read(String str) {
-        return str;
+    public String readProperty(String symbolName, String propertyName) throws IOException {
+        final Properties prop = new Properties();
+        final String str = (String) getSymbol(symbolName);
+        try (StringReader sr = new StringReader(str)) {
+            prop.load(sr);
+        }
+        return prop.getProperty(propertyName);
     }
 }

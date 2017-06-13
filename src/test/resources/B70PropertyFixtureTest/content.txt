@@ -1,0 +1,11 @@
+|Import|
+|ru.bedward70.fitnesse.io|
+
+|!-B70FileFixture-!|
+|saveSymbol|readFromFile|common.properties|$common-properties|
+
+|!-B70PropertyFixture-!|
+|saveSymbol|read|$common-properties|property|url|$api-url|
+
+|!-B70DoFixture-!|
+|check|readSymbol|$api-url|http://localhost:8888|

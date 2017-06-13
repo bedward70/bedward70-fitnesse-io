@@ -22,40 +22,22 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package ru.bedward70.fitnesse.io;
+package ru.bedward70.fitnesse.io.traverse;
 
-import fit.Fixture;
-import fitlibrary.DoFixture;
-import ru.bedward70.fitnesse.io.traverse.B70DoTraverse;
+import fitlibrary.table.Cell;
+
+import java.io.IOException;
 
 /**
- * Created by Eduard Balovnev on 11.06.17.
+ * Created by bedward70 on 11.06.17.
  *
  */
-public class B70DoFixture extends DoFixture {
+public interface B70Saver {
 
     /**
-     * Constructor
+     * Saves object to somewhere
+     * @param expectedCell the cell with a name. The name is a symbol name or filename or etc.
+     * @param object saving object
      */
-    public B70DoFixture() {
-        setTraverse(new B70DoTraverse(this));
-    }
-
-    /**
-     * Read symbol
-     * @param symbolName symbol name
-     * @return an object
-     */
-    public Object readSymbol(String symbolName) {
-        return Fixture.getSymbol(symbolName);
-    }
-
-    /**
-     * Read the some string
-     * @param str string
-     * @return an object
-     */
-    public String read(String str) {
-        return str;
-    }
+    void save(Cell expectedCell , Object object) throws IOException;
 }

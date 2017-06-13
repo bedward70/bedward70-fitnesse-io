@@ -24,65 +24,61 @@
  */
 package ru.bedward70.fitnesse.io.traverse;
 
-import fit.Fixture;
-import fitlibrary.closure.CalledMethodTarget;
-import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
-import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.utility.TestResults;
+import org.apache.commons.io.FileUtils;
+import ru.bedward70.fitnesse.io.B70Encoder;
+
+import java.io.File;
+import java.io.IOException;
+
+import static java.util.Objects.isNull;
 
 /**
  * Created by bedward70 on 11.06.17.
  * The extender of DoTraverse to saveSymbol as symbol
  */
-public class B70DoTraverse extends DoTraverse {
+public class B70FileTraverse extends B70DoTraverse {
+
+    /** Encoder*/
+    private final B70Encoder b70Encoder;
 
     /**
      * Constructor
      * @param sut sut
      */
-    public B70DoTraverse(Object sut) {
+    public B70FileTraverse(B70Encoder sut) {
         super(sut);
+        b70Encoder = sut;
     }
 
     /**
-     * Save as symbol
+     * Save to file
      * @param row row
      * @param testResults testResults
      * @throws Exception Exception
      */
-    public void saveSymbol(Row row, TestResults testResults) throws Exception {
+    public void saveToFile(Row row, TestResults testResults) throws Exception {
         save(
             row,
             testResults,
             new B70Saver() {
                 @Override
-                public void save(Cell expectedCell, Object object) {
-                    String name = expectedCell.text();
-                    Fixture.setSymbol(name, object);
-                    expectedCell.parse.addToBody(Fixture.gray(" = " + Fixture.getSymbol(name)));
+                public void save(Cell expectedCell, Object object) throws IOException {
+                    final String filename = expectedCell.text();
+                    if (isNull(object)) {
+                        throw new NullPointerException("Can't save null object to \"" + filename + "\" file");
+                    }
+                    if (object instanceof byte[]) {
+                        FileUtils.writeByteArrayToFile(new File(filename), (byte[])object);
+
+                    } else {
+                        FileUtils.write(new File(filename), object.toString(), b70Encoder.getEncoding());
+                    }
+                    //expectedCell.parse.addToBody(Fixture.gray(" = " + new File(filename).getAbsolutePath()));
                 }
             }
         );
-    }
-
-    /**
-     * Saves by B70Saver
-     * @param row row
-     * @param testResults testResults
-     * @param saver saver
-     * @throws Exception Exception
-     */
-    public void save(Row row, TestResults testResults, B70Saver saver) throws Exception {
-        int less = 3;
-        if(row.size() < less) {
-            throw new MissingCellsException("B70DoTraverseSave");
-        } else {
-            CalledMethodTarget target = this.findMethodFromRow(row, less);
-            Object result = target.invoke(row.rowFrom(2), testResults, true);
-            Cell expectedCell = row.last();
-            saver.save(expectedCell, result);
-        }
     }
 }

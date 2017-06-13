@@ -24,38 +24,20 @@
  */
 package ru.bedward70.fitnesse.io;
 
-import fit.Fixture;
-import fitlibrary.DoFixture;
-import ru.bedward70.fitnesse.io.traverse.B70DoTraverse;
-
 /**
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public class B70DoFixture extends DoFixture {
+public interface B70Encoder {
 
     /**
-     * Constructor
+     * Default encoding
      */
-    public B70DoFixture() {
-        setTraverse(new B70DoTraverse(this));
-    }
+    static final String DEFAULT_ENCODING = "UTF-8";
 
     /**
-     * Read symbol
-     * @param symbolName symbol name
-     * @return an object
+     * Return encoding
+     * @return encoding
      */
-    public Object readSymbol(String symbolName) {
-        return Fixture.getSymbol(symbolName);
-    }
-
-    /**
-     * Read the some string
-     * @param str string
-     * @return an object
-     */
-    public String read(String str) {
-        return str;
-    }
+    String getEncoding();
 }

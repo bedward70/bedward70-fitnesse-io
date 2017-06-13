@@ -1,0 +1,40 @@
+!define filename {hello-world.txt}
+!define encoding {UTF-8}
+
+|Import|
+|ru.bedward70.fitnesse.io|
+
+Makes Phrase
+
+|!-B70DoFixture-!|
+|saveSymbol|read|Hello|$first-world|
+|saveSymbol|read|World|$second-world|
+
+
+|!-B70JoinFixture-!|=$first-world|!-, -!|=$second-world|
+|add|!|
+|saveSymbol|join|$phrase|
+
+
+|!-B70DoFixture-!|
+|check|readSymbol|$phrase|Hello, World!|
+
+Save to File
+
+|!-B70FileFixture-!|
+|set encoding|${encoding}|
+|saveToFile|readSymbol|$phrase|${filename}|
+
+Read from File
+
+|!-B70FileFixture-!|
+|set encoding|${encoding}|
+|saveSymbol|readFromFile|${filename}|$saved-phrase|
+
+|!-B70DoFixture-!|
+|check|readSymbol|$saved-phrase|Hello, World!|
+
+Delete  File
+
+|!-B70FileFixture-!|
+|deleteFile|${filename}|
