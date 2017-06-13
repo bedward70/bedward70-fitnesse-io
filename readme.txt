@@ -1,0 +1,1 @@
+It is a adding of a save symbol method to DoFixture.
