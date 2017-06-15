@@ -24,6 +24,8 @@
  */
 package ru.bedward70.fitnesse.io;
 
+import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Properties;
@@ -36,16 +38,16 @@ public class B70PropertyFixture extends B70DoFixture {
 
     /**
      * Read property
-     * @param symbolName symbol name
+     * @param source  source
      * @param propertyName property name
      * @return an object
      */
-    public String readProperty(String symbolName, String propertyName) throws IOException {
+    public String readProperty(String source, String propertyName) throws IOException {
         final Properties prop = new Properties();
-        final String str = (String) getSymbol(symbolName);
+        final String str = B70ParseBinder.create(this, source).getValue().toString();
         try (StringReader sr = new StringReader(str)) {
             prop.load(sr);
         }
-        return prop.getProperty(propertyName);
+        return prop.getProperty(B70ParseBinder.create(this, propertyName).getValue().toString());
     }
 }

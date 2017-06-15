@@ -25,14 +25,21 @@
 package ru.bedward70.fitnesse.io;
 
 import fit.Fixture;
+import fit.Parse;
 import fitlibrary.DoFixture;
+import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
 import ru.bedward70.fitnesse.io.traverse.B70DoTraverse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
 public class B70DoFixture extends DoFixture {
+
+    public final List<Object> bindArgs = new ArrayList<>();
 
     /**
      * Constructor
@@ -41,13 +48,23 @@ public class B70DoFixture extends DoFixture {
         setTraverse(new B70DoTraverse(this));
     }
 
-    /**
-     * Read symbol
-     * @param symbolName symbol name
-     * @return an object
-     */
-    public Object readSymbol(String symbolName) {
-        return Fixture.getSymbol(symbolName);
+
+    @Override
+    public void getArgsForTable(Parse table) {
+        super.getArgsForTable(table);
+        getBindArgsForTable(table);
+    }
+
+    private void getBindArgsForTable(Parse table) throws RuntimeException {
+
+        for(Parse parameters = table.parts.parts.more; parameters != null; parameters = parameters.more) {
+            String name = Parse.unescape(parameters.body);
+            Object value = B70ParseBinder.create(this, name).getValue();
+            if (!name.equals(value)) {
+                parameters.addToBody(Fixture.gray(" = " + value));
+            }
+            bindArgs.add(value);
+        }
     }
 
     /**
@@ -55,7 +72,7 @@ public class B70DoFixture extends DoFixture {
      * @param str string
      * @return an object
      */
-    public String read(String str) {
-        return str;
+    public Object read(String str) {
+        return B70ParseBinder.create(this, str).getValue();
     }
 }

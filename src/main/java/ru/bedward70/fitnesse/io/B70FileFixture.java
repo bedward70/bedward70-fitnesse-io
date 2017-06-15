@@ -25,6 +25,7 @@
 package ru.bedward70.fitnesse.io;
 
 import org.apache.commons.io.FileUtils;
+import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
 import ru.bedward70.fitnesse.io.traverse.B70FileTraverse;
 
 import java.io.File;
@@ -63,11 +64,12 @@ public class B70FileFixture extends B70DoFixture implements B70Encoder {
 
     /**
      * Reads from file as byte array
-     * @param fileName fileName
+     * @param name fileName
      * @return byte array
      * @throws IOException IOException
      */
-    public byte[] readByteFromFile(String fileName) throws IOException {
+    public byte[] readByteFromFile(String name) throws IOException {
+        final String fileName = B70ParseBinder.create(this, name).getValue().toString();
         byte[] result = null;
         final File file = new File(fileName);
         if (file.exists()) {
@@ -80,11 +82,12 @@ public class B70FileFixture extends B70DoFixture implements B70Encoder {
 
     /**
      * Reads from file as string
-     * @param fileName fileName
+     * @param name name
      * @return byte array
      * @throws IOException IOException
      */
-    public String readFromFile(String fileName) throws IOException {
+    public String readFromFile(String name) throws IOException {
+        final String fileName = B70ParseBinder.create(this, name).getValue().toString();
         String result = null;
         final File file = new File(fileName);
         if (file.exists()) {

@@ -24,12 +24,7 @@
  */
 package ru.bedward70.fitnesse.io;
 
-import fit.Fixture;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.util.Objects.isNull;
+import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
 
 /**
  * Created by ebalovnev on 07.06.17.
@@ -37,19 +32,13 @@ import static java.util.Objects.isNull;
  */
 public class B70JoinFixture extends B70DoFixture {
 
-    public static final int REQUERED_PARAMETER_COUNT = 0;
-    public static final String SYMBOL_PREFIX = "=";
-
-    private final List<String> parts = new ArrayList<>();
-
-
     /**
      * Add part
      * @param part part
      * @return
      */
     public void add(String part) {
-        parts.add(part);
+        bindArgs.add(B70ParseBinder.create(this, part).getValue());
     }
 
     /**
@@ -59,29 +48,9 @@ public class B70JoinFixture extends B70DoFixture {
     public String join() {
         StringBuffer result = new StringBuffer();
 
-        // From headers
-        for (int i = 0; i < args.length - REQUERED_PARAMETER_COUNT; i++) {
-            result.append(parse(args[i + REQUERED_PARAMETER_COUNT]));
-        }
-
-        // Added
-        for (String part : parts) {
-            result.append(parse(part));
+        for (Object part : bindArgs) {
+            result.append(part);
         }
         return result.toString();
     }
-
-    /**
-     * Checks symbol prefix if then prefix and read symbol
-     * @param part part
-     * @return
-     */
-    private Object parse(String part) {
-        if (!isNull(part) && part.startsWith(SYMBOL_PREFIX) && Fixture.hasSymbol(part.substring(1).trim())) {
-            return getSymbol(part.substring(1).trim());
-        } else {
-            return part;
-        }
-    }
-
 }

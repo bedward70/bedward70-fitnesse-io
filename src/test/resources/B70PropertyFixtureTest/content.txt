@@ -1,11 +1,17 @@
 |Import|
 |ru.bedward70.fitnesse.io|
 
+READ FILE TO $common-properties symbol
+
 |!-B70FileFixture-!|
 |saveSymbol|readFromFile|common.properties|$common-properties|
 
+GET url property
+
 |!-B70PropertyFixture-!|
-|saveSymbol|read|$common-properties|property|url|$api-url|
+|saveSymbol|read|=$common-properties|property|url|$api-url|
+
+CHECK $api-url symbol
 
 |!-B70DoFixture-!|
-|check|readSymbol|$api-url|http://localhost:8888|
+|check|read|=$api-url|http://localhost:8888|

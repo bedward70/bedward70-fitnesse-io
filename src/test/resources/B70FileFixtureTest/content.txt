@@ -17,13 +17,13 @@ Makes Phrase
 
 
 |!-B70DoFixture-!|
-|check|readSymbol|$phrase|Hello, World!|
+|check|read|=$phrase|Hello, World!|
 
 Save to File
 
 |!-B70FileFixture-!|
 |set encoding|${encoding}|
-|saveToFile|readSymbol|$phrase|${filename}|
+|saveToFile|read|=$phrase|${filename}|
 
 Read from File
 
@@ -32,7 +32,7 @@ Read from File
 |saveSymbol|readFromFile|${filename}|$saved-phrase|
 
 |!-B70DoFixture-!|
-|check|readSymbol|$saved-phrase|Hello, World!|
+|check|read|=$saved-phrase|Hello, World!|
 
 Delete  File
 

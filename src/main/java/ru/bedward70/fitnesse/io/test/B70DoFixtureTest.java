@@ -35,4 +35,8 @@ public class B70DoFixtureTest extends B70DoFixture {
     public int calculateHashCode(String string) {
         return string.hashCode();
     }
+
+    public String getHelloWorld() {
+        return "Hello, World!";
+    }
 }

@@ -24,6 +24,7 @@
  */
 package ru.bedward70.fitnesse.io.traverse;
 
+import fit.Fixture;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.utility.TestResults;
@@ -76,7 +77,7 @@ public class B70FileTraverse extends B70DoTraverse {
                     } else {
                         FileUtils.write(new File(filename), object.toString(), b70Encoder.getEncoding());
                     }
-                    //expectedCell.parse.addToBody(Fixture.gray(" = " + new File(filename).getAbsolutePath()));
+                    expectedCell.parse.addToBody(Fixture.gray(" = " + new File(filename).getAbsolutePath()));
                 }
             }
         );
