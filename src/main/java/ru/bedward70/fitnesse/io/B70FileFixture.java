@@ -26,7 +26,9 @@ package ru.bedward70.fitnesse.io;
 
 import org.apache.commons.io.FileUtils;
 import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
-import ru.bedward70.fitnesse.io.traverse.B70FileTraverse;
+import ru.bedward70.fitnesse.io.saver.B70ByteFileSaver;
+import ru.bedward70.fitnesse.io.saver.B70Saver;
+import ru.bedward70.fitnesse.io.saver.B70TextFileSaver;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,17 +38,15 @@ import java.io.IOException;
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public class B70FileFixture extends B70DoFixture implements B70Encoder {
+public class B70FileFixture extends B70DoFixture {
+
+    /**
+     * Default encoding
+     */
+    static final String DEFAULT_ENCODING = "UTF-8";
 
     /** Encoding */
     private String encoding = DEFAULT_ENCODING;
-
-    /**
-     * Constructor
-     */
-    public B70FileFixture() {
-        setTraverse(new B70FileTraverse(this));
-    }
 
     /**
      * @return encoding
@@ -83,20 +83,32 @@ public class B70FileFixture extends B70DoFixture implements B70Encoder {
     /**
      * Reads from file as string
      * @param name name
-     * @return byte array
+     * @return string
      * @throws IOException IOException
      */
     public String readFromFile(String name) throws IOException {
+        return readFromFileEncoding(name, encoding);
+    }
+
+    /**
+     * Reads from file as string
+     * @param name name
+     * @param customEncoding custom encoding
+     * @return string
+     * @throws IOException IOException
+     */
+    public String readFromFileEncoding(String name, final String customEncoding) throws IOException {
         final String fileName = B70ParseBinder.create(this, name).getValue().toString();
         String result = null;
         final File file = new File(fileName);
         if (file.exists()) {
-            result = FileUtils.readFileToString(file, encoding);
+            result = FileUtils.readFileToString(file, customEncoding);
         } else {
             throw new FileNotFoundException(file.getAbsolutePath());
         }
         return result;
     }
+
 
     /**
      * Deletes file
@@ -107,5 +119,33 @@ public class B70FileFixture extends B70DoFixture implements B70Encoder {
     public boolean deleteFile(String fileName) throws IOException {
         final File file = new File(fileName);
         return file.exists() && file.delete();
+    }
+
+    /**
+     * Creates B70Saver instance  to file
+     * @param fileName fileName
+     * @throws Exception Exception
+     */
+    public B70Saver createByteFileSaver(final String fileName) throws Exception {
+        return new B70ByteFileSaver(fileName);
+    }
+
+    /**
+     * Creates B70Saver instance  to file
+     * @param fileName fileName
+     * @throws Exception Exception
+     */
+    public B70Saver createTextFileSaver(final String fileName) throws Exception {
+        return createTextFileSaverEncoding(fileName, encoding);
+    }
+
+    /**
+     * Creates B70Saver instance  to file
+     * @param fileName fileName
+     * @param customEncoding custom encoding
+     * @throws Exception Exception
+     */
+    public B70Saver createTextFileSaverEncoding(final String fileName, final String customEncoding) throws Exception {
+        return new B70TextFileSaver(fileName, customEncoding);
     }
 }

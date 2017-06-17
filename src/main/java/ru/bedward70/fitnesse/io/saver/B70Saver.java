@@ -22,22 +22,22 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package ru.bedward70.fitnesse.io;
+package ru.bedward70.fitnesse.io.saver;
+
+import fitlibrary.table.Cell;
+
+import java.io.IOException;
 
 /**
- * Created by Eduard Balovnev on 11.06.17.
+ * Created by bedward70 on 11.06.17.
  *
  */
-public interface B70Encoder {
+public interface B70Saver {
 
     /**
-     * Default encoding
+     * Saves object to somewhere
+     * @param expectedCell the cell with a name. The name is a symbol name or filename or etc.
+     * @param object saving object
      */
-    static final String DEFAULT_ENCODING = "UTF-8";
-
-    /**
-     * Return encoding
-     * @return encoding
-     */
-    String getEncoding();
+    void save(Cell expectedCell , Object object) throws IOException;
 }

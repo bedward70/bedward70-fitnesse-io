@@ -22,22 +22,37 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package ru.bedward70.fitnesse.io.traverse;
+package ru.bedward70.fitnesse.io.saver;
 
+import fit.Fixture;
 import fitlibrary.table.Cell;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
+
+import static java.util.Objects.isNull;
 
 /**
  * Created by bedward70 on 11.06.17.
  *
  */
-public interface B70Saver {
+public class B70TextFileSaver implements B70Saver {
 
-    /**
-     * Saves object to somewhere
-     * @param expectedCell the cell with a name. The name is a symbol name or filename or etc.
-     * @param object saving object
-     */
-    void save(Cell expectedCell , Object object) throws IOException;
+    private final String filename;
+    private final String encoding;
+
+    public B70TextFileSaver(String filename, String encoding) {
+        this.filename = filename;
+        this.encoding = encoding;
+    }
+
+    @Override
+    public void save(Cell expectedCell, Object object) throws IOException {
+        if (isNull(object)) {
+            throw new NullPointerException("Can't save null object to \"" + filename + "\" file");
+        }
+        FileUtils.write(new File(filename), object.toString(), encoding);
+        expectedCell.parse.addToBody(Fixture.gray(" = " + new File(filename).getAbsolutePath()));
+    }
 }

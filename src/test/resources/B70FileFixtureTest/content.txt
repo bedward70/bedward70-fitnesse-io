@@ -23,7 +23,8 @@ Save to File
 
 |!-B70FileFixture-!|
 |set encoding|${encoding}|
-|saveToFile|read|=$phrase|${filename}|
+|saveSymbol|create text file saver|${filename}|$file-saver|
+|saveToSaver|read|=$phrase|$file-saver|
 
 Read from File
 

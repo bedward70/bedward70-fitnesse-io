@@ -25,12 +25,14 @@
 package ru.bedward70.fitnesse.io.traverse;
 
 import fit.Fixture;
+import fit.exception.FitFailureException;
 import fitlibrary.closure.CalledMethodTarget;
 import fitlibrary.exception.table.MissingCellsException;
 import fitlibrary.table.Cell;
 import fitlibrary.table.Row;
 import fitlibrary.traverse.workflow.DoTraverse;
 import fitlibrary.utility.TestResults;
+import ru.bedward70.fitnesse.io.saver.B70Saver;
 
 /**
  * Created by bedward70 on 11.06.17.
@@ -53,28 +55,6 @@ public class B70DoTraverse extends DoTraverse {
      * @throws Exception Exception
      */
     public void saveSymbol(Row row, TestResults testResults) throws Exception {
-        save(
-            row,
-            testResults,
-            new B70Saver() {
-                @Override
-                public void save(Cell expectedCell, Object object) {
-                    String name = expectedCell.text();
-                    Fixture.setSymbol(name, object);
-                    expectedCell.parse.addToBody(Fixture.gray(" = " + Fixture.getSymbol(name)));
-                }
-            }
-        );
-    }
-
-    /**
-     * Saves by B70Saver
-     * @param row row
-     * @param testResults testResults
-     * @param saver saver
-     * @throws Exception Exception
-     */
-    public void save(Row row, TestResults testResults, B70Saver saver) throws Exception {
         int less = 3;
         if(row.size() < less) {
             throw new MissingCellsException("B70DoTraverseSave");
@@ -82,7 +62,36 @@ public class B70DoTraverse extends DoTraverse {
             CalledMethodTarget target = this.findMethodFromRow(row, less);
             Object result = target.invoke(row.rowFrom(2), testResults, true);
             Cell expectedCell = row.last();
-            saver.save(expectedCell, result);
+            String name = expectedCell.text();
+            Fixture.setSymbol(name, result);
+            expectedCell.parse.addToBody(Fixture.gray(" = " + Fixture.getSymbol(name)));
+        }
+    }
+
+    /**
+     * Save as symbol
+     * @param row row
+     * @param testResults testResults
+     * @throws Exception Exception
+     */
+    public void saveToSaver(Row row, TestResults testResults) throws Exception {
+        int less = 3;
+        if(row.size() < less) {
+            throw new MissingCellsException("B70DoTraverseSave");
+        } else {
+            CalledMethodTarget target = this.findMethodFromRow(row, less);
+            Object result = target.invoke(row.rowFrom(2), testResults, true);
+            Cell expectedCell = row.last();
+            if(!Fixture.hasSymbol(expectedCell.text())) {
+                throw new FitFailureException("No such symbol: " + expectedCell.text());
+            } else {
+                Object value = Fixture.getSymbol(expectedCell.text());
+                if (value instanceof B70Saver) {
+                    ((B70Saver) value).save(expectedCell, result);
+                } else {
+                    throw new FitFailureException("It isn't B70Saver instance: " + expectedCell.text());
+                }
+            }
         }
     }
 }
