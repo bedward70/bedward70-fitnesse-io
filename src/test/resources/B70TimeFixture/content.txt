@@ -1,0 +1,26 @@
+|Import|
+|ru.bedward70.fitnesse.io|
+
+Date
+
+|!-B70TimeFixture-!|
+|saveSymbol|current date|$date1|
+|show|to|=$date1|format|yyyy-MM-dd'T'HH:mm:ss.SSSZ|
+
+Wait 1 second
+
+|!-B70TimeFixture-!|
+|wait seconds|1|
+
+|!-B70TimeFixture-!|
+|saveSymbol|current date|$date1|
+|show|to|=$date1|format|yyyy-MM-dd'T'HH:mm:ss.SSSZ|
+
+Wait 1 second
+
+|!-B70TimeFixture-!|
+|wait milliseconds|1000|
+
+|!-B70TimeFixture-!|
+|saveSymbol|current date|$date1|
+|show|to|=$date1|format|yyyy-MM-dd'T'HH:mm:ss.SSSZ|

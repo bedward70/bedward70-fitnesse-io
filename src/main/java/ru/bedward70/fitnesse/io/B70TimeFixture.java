@@ -26,31 +26,37 @@ package ru.bedward70.fitnesse.io;
 
 import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
- * Created by bedward70 on 07.06.17.
- * http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.FixtureGallery.ImportantConcepts.FixtureSymbols
+ * Created by bedward70 on 06.06.17.
  */
-public class B70JoinFixture extends B70DoFixture {
+public class B70TimeFixture extends B70DoFixture {
 
-    /**
-     * Add part
-     * @param part part
-     * @return
-     */
-    public void add(String part) {
-        bindArgs.add(B70ParseBinder.create(this, part).getValue());
+    public void waitSeconds(String seconds) throws Exception {
+
+        Thread.sleep(1000L * getValue(seconds));
     }
 
-    /**
-     * Join
-     * @return
-     */
-    public String join() {
-        StringBuffer result = new StringBuffer();
+    public void waitMilliseconds(String milliseconds) throws Exception {
 
-        for (Object part : bindArgs) {
-            result.append(part);
-        }
-        return result.toString();
+        Thread.sleep(getValue(milliseconds));
     }
+
+    private Long getValue(String seconds) {
+        final Object object = B70ParseBinder.create(this, seconds).getValue();
+        return object instanceof Number ? ((Number) object).longValue() : Long.valueOf(object.toString());
+    }
+
+    public Date currentDate() {
+        return new Date();
+    }
+
+    public String toFormat(String dateStr, String formatStr) {
+        final Date date = (Date) B70ParseBinder.create(this, dateStr).getValue();
+        final String format = B70ParseBinder.create(this, formatStr).getValue().toString();
+        return new SimpleDateFormat(format).format(date);
+    }
+
 }
