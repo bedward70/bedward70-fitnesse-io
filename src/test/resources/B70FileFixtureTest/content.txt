@@ -12,7 +12,7 @@ Makes Phrase
 
 
 |!-B70JoinFixture-!|=$first-world|!-, -!|=$second-world|
-|add|!|
+|add arg|!|
 |saveSymbol|join|$phrase|
 
 

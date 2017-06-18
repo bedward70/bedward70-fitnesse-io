@@ -22,51 +22,48 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package ru.bedward70.fitnesse.io;
+package ru.bedward70.fitnesse.io.argument;
 
+import fit.Fixture;
 import fit.Parse;
-import fitlibrary.DoFixture;
-import ru.bedward70.fitnesse.io.argument.B70BindArguments;
 import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
-import ru.bedward70.fitnesse.io.traverse.B70DoTraverse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public class B70DoFixture extends DoFixture {
+public class B70BindArguments {
 
-    public final B70BindArguments bindArguments = new B70BindArguments(this);
+    private final List<Object> bindArgs = new ArrayList<>();
 
-    /**
-     * Constructor
-     */
-    public B70DoFixture() {
-        setTraverse(new B70DoTraverse(this));
+    public final Fixture fixture;
+
+    public B70BindArguments(Fixture fixture) {
+        this.fixture = fixture;
     }
 
+    public void addArgs(Parse table) throws RuntimeException {
 
-    @Override
-    public void getArgsForTable(Parse table) {
-        super.getArgsForTable(table);
-        bindArguments.addArgs(table);
+        for(Parse parameters = table.parts.parts.more; parameters != null; parameters = parameters.more) {
+            String name = Parse.unescape(parameters.body);
+            Object value = addArg(name);
+            if (!name.equals(value)) {
+                parameters.addToBody(Fixture.gray(" = " + value));
+            }
+        }
     }
 
-    /**
-     * Add part
-     * @param part part
-     * @return
-     */
-    public void addArg(String part) {
-        bindArguments.addArg(part);
+    public Object addArg(String name) throws RuntimeException {
+
+        final Object result = B70ParseBinder.create(fixture, name).getValue();
+        bindArgs.add(result);
+        return result;
     }
 
-    /**
-     * Read the some string
-     * @param str string
-     * @return an object
-     */
-    public Object read(String str) {
-        return B70ParseBinder.create(this, str).getValue();
+    public List<Object> getBindArgs() {
+        return new ArrayList<>(bindArgs);
     }
 }

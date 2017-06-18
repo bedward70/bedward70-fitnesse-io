@@ -22,29 +22,20 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package ru.bedward70.fitnesse.io;
+package ru.bedward70.fitnesse.row;
 
 import fit.Parse;
-import fitlibrary.DoFixture;
+import fit.RowFixture;
 import ru.bedward70.fitnesse.io.argument.B70BindArguments;
-import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
-import ru.bedward70.fitnesse.io.traverse.B70DoTraverse;
+import ru.bedward70.fitnesse.row.data.B70MapData;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public class B70DoFixture extends DoFixture {
+public abstract class B70RowFixture extends RowFixture {
 
     public final B70BindArguments bindArguments = new B70BindArguments(this);
-
-    /**
-     * Constructor
-     */
-    public B70DoFixture() {
-        setTraverse(new B70DoTraverse(this));
-    }
-
 
     @Override
     public void getArgsForTable(Parse table) {
@@ -52,21 +43,8 @@ public class B70DoFixture extends DoFixture {
         bindArguments.addArgs(table);
     }
 
-    /**
-     * Add part
-     * @param part part
-     * @return
-     */
-    public void addArg(String part) {
-        bindArguments.addArg(part);
-    }
-
-    /**
-     * Read the some string
-     * @param str string
-     * @return an object
-     */
-    public Object read(String str) {
-        return B70ParseBinder.create(this, str).getValue();
+    @Override
+    public Class<B70MapData> getTargetClass() {
+        return B70MapData.class;
     }
 }

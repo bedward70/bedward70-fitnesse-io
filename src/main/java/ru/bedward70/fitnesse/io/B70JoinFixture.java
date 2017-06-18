@@ -24,22 +24,12 @@
  */
 package ru.bedward70.fitnesse.io;
 
-import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
-
 /**
  * Created by bedward70 on 07.06.17.
  * http://fitnesse.org/FitNesse.FullReferenceGuide.UserGuide.FixtureGallery.ImportantConcepts.FixtureSymbols
  */
 public class B70JoinFixture extends B70DoFixture {
 
-    /**
-     * Add part
-     * @param part part
-     * @return
-     */
-    public void add(String part) {
-        bindArgs.add(B70ParseBinder.create(this, part).getValue());
-    }
 
     /**
      * Join
@@ -48,7 +38,7 @@ public class B70JoinFixture extends B70DoFixture {
     public String join() {
         StringBuffer result = new StringBuffer();
 
-        for (Object part : bindArgs) {
+        for (Object part : bindArguments.getBindArgs()) {
             result.append(part);
         }
         return result.toString();
