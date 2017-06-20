@@ -5,7 +5,7 @@
 READ FILE TO $windows-common-properties symbol
 
 |!-B70FileFixture-!|
-|saveSymbol|readFromFile|windows_common.properties|$windows-common-properties|
+|saveSymbol|readFromFile|testdata/windows_common.properties|$windows-common-properties|
 
 GET all property from Main section
 

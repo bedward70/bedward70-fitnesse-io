@@ -5,7 +5,7 @@
 READ FILE TO $common-properties symbol
 
 |!-B70FileFixture-!|
-|saveSymbol|readFromFile|common.properties|$common-properties|
+|saveSymbol|readFromFile|testdata/common.properties|$common-properties|
 
 GET name property
 
