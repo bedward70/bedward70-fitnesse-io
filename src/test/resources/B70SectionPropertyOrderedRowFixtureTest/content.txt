@@ -1,0 +1,31 @@
+|Import|
+|ru.bedward70.fitnesse.io|
+|ru.bedward70.fitnesse.row|
+
+READ FILE TO $windows-common-properties symbol
+
+|!-B70FileFixture-!|
+|saveSymbol|readFromFile|windows_common.properties|$windows-common-properties|
+
+GET all property from Main section
+
+|!-B70SectionPropertyOrderedRowFixture-!|=$windows-common-properties|Main|
+|count|!-main..name-!|
+|$main-count=|$main-name=|
+
+|!-B70DoFixture-!|
+|check|read|=$main-count|3|
+|check|read|=$main-name|Week|
+
+
+CHECK Section1 section
+
+|!-B70SectionPropertyOrderedRowFixture-!|=$windows-common-properties|Section1|
+|name|count|!-main..name-!|
+|Wednesday|1|=$main-name|
+
+CHECK Section2 section
+
+|!-B70SectionPropertyOrderedRowFixture-!|=$windows-common-properties|Section2|
+|name|count|!-main..name-!|
+|Friday|2|=$main-name|

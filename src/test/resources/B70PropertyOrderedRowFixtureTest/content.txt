@@ -1,0 +1,29 @@
+|Import|
+|ru.bedward70.fitnesse.io|
+|ru.bedward70.fitnesse.row|
+
+READ FILE TO $common-properties symbol
+
+|!-B70FileFixture-!|
+|saveSymbol|readFromFile|common.properties|$common-properties|
+
+GET name property
+
+|!-B70PropertyOrderedRowFixture-!|=$common-properties|
+|name|
+|$name=|
+
+|!-B70DoFixture-!|
+|check|read|=$name|Wednesday|
+
+CHECK url property
+
+|!-B70PropertyOrderedRowFixture-!|=$common-properties|
+|url|
+|http://localhost:8888|
+
+CHECK all properties
+
+|!-B70PropertyOrderedRowFixture-!|=$common-properties|
+|name|url|
+|=$name|http://localhost:8888|

@@ -50,13 +50,15 @@ public abstract class B70ParseBinder {
     private static final Pattern methodPattern = Pattern.compile("(.+)(?:\\(\\)|\\?|!)");
     private static final Pattern fieldPattern = Pattern.compile("=?([^=]+)=?");
 
+    public static final String ASSIGNMENT_STRING = "=";
+
 
     public abstract Object getValue() throws RuntimeException;
 
     public static B70ParseBinder create(Fixture fixture, String name) throws RuntimeException {
         B70ParseBinder result;
 
-        if (name.startsWith("=")) {
+        if (name.startsWith(ASSIGNMENT_STRING)) {
             result = new B70ParseBinder.RecallBinding(name.substring(1));
         } else if (
             regexMethodPattern.matcher(name).matches()
