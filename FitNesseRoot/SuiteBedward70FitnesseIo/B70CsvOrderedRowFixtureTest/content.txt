@@ -1,0 +1,17 @@
+|Import|
+|ru.bedward70.fitnesse.io|
+|ru.bedward70.fitnesse.row|
+
+READ FILE 
+
+|!-B70FileFixture-!|
+|saveSymbol|readFromFile|testdata/ordered-csv.txt|$ordered-csv|
+
+CHECK 
+
+|!-B70CsvOrderedRowFixture-!|=$ordered-csv|!-|-!|
+|ROW|Planet|AU|
+|1|Mercury|0.4|
+|2|Venus|0.7|
+|3|Earth|1.0|
+|4|Mars|1.5|

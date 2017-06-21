@@ -27,3 +27,14 @@ hs_err_pid*
 
 # Maven
 target
+
+#Fitnesse
+FitNesseRoot/FitNesse
+FitNesseRoot/PageFooter
+FitNesseRoot/PageHeader
+FitNesseRoot/TemplateLibrary
+FitNesseRoot/properties
+FitNesseRoot/RecentChanges
+FitNesseRoot/files
+fitnesse-standalone.jar
+run.sh
