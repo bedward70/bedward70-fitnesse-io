@@ -36,5 +36,6 @@ FitNesseRoot/TemplateLibrary
 FitNesseRoot/properties
 FitNesseRoot/RecentChanges
 FitNesseRoot/files
+properties.xml
 fitnesse-standalone.jar
 run.sh
