@@ -26,10 +26,7 @@ package ru.bedward70.fitnesse.db;
 
 import ru.bedward70.fitnesse.io.B70DoFixture;
 
-import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -41,15 +38,12 @@ public class B70DBUpdateFixture extends B70DoFixture {
     public static final int REQUERED_PARAMETER_COUNT = 2;
 
     public int execute() throws IOException, SQLException {
-        final DataSource ds = (DataSource) bindArguments.getBindArgs().get(0);
-        final String sql = bindArguments.getBindArgs().get(1).toString();
-        try (Connection conn = ds.getConnection()) {
-            try (PreparedStatement st = conn.prepareStatement(sql)) {
-                for (int i = 0; i < args.length - REQUERED_PARAMETER_COUNT; i++) {
-                    st.setObject(i + 1, bindArguments.getBindArgs().get(i + REQUERED_PARAMETER_COUNT));
-                }
-                return st.executeUpdate();
-            }
+        B70DBFixture fixture = new B70DBFixture();
+        fixture.setDataSource(args[0]);
+        fixture.setSql(args[1]);
+        for (int i = 0; i < args.length - REQUERED_PARAMETER_COUNT; i++) {
+            fixture.addParam(args[i + REQUERED_PARAMETER_COUNT]);
         }
+        return fixture.execute();
     }
 }

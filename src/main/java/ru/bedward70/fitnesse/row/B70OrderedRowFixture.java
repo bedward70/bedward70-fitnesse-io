@@ -30,7 +30,7 @@ import java.util.List;
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public abstract class B70OrderedRowFixture extends B70RowFixture {
+public class B70OrderedRowFixture extends B70RowFixture {
 
     /**
      * No keys in rows. The fixture expects ordered rows

@@ -43,7 +43,7 @@ import static ru.bedward70.fitnesse.io.parse.B70ParseBinder.ASSIGNMENT_STRING;
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public abstract class B70RowFixture extends RowFixture {
+public class B70RowFixture extends RowFixture {
 
     public final B70BindArguments bindArguments = new B70BindArguments(this);
 
@@ -51,6 +51,12 @@ public abstract class B70RowFixture extends RowFixture {
     public void getArgsForTable(Parse table) {
         super.getArgsForTable(table);
         bindArguments.addArgs(table);
+    }
+
+
+    @Override
+    public Object[] query() throws Exception {
+        return (Object[]) bindArguments.getBindArgs().get(0);
     }
 
     /**

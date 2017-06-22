@@ -1,0 +1,89 @@
+|Import|
+|ru.bedward70.fitnesse.db|
+|ru.bedward70.fitnesse.io|
+|ru.bedward70.fitnesse.row|
+
+READ FILE
+
+|!-B70FileFixture-!|
+|saveSymbol|readFromFile|testdata/database.properties|$database-properties|
+
+
+Save all properties as symbols
+
+|!-B70PropertyOrderedRowFixture-!|=$database-properties|
+|jdbc.driver|jdbc.url|jdbc.user|jdbc.password|jdbc.maxPoolSize|
+|$jdbc-driver=|$jdbc-url=|$jdbc-user=|$jdbc-password=|$jdbc-maxPoolSize=|
+
+{{{=== Create Database Source ==}}}
+
+|!-B70DBSourceFixture-!|
+|set driver|=$jdbc-driver|
+|set url|=$jdbc-url|
+|set user|=$jdbc-user|
+|set password|=$jdbc-password|
+|set max pool size|=$jdbc-maxPoolSize|
+|saveSymbol|create data source|$database-source|
+
+
+{{{=== Create table ==}}}
+
+|!-B70DBFixture-!|
+|set data source|=$database-source|
+|set sql|!-
+CREATE TABLE T1 (
+	i INTEGER,
+    name VARCHAR(32)
+);
+-!|
+|execute|
+
+
+{{{=== Insert Records ==}}}
+
+
+|!-B70DoFixture-!|
+|saveSymbol|read|1|$first-number|
+|saveSymbol|read|First|$first-name|
+|saveSymbol|read|2|$second-number|
+|saveSymbol|read|Second|$second-name|
+
+|!-B70DBFixture-!|
+|set data source|=$database-source|
+|set sql|!-INSERT INTO T1 (i, name) VALUES (?, ?);-!|
+|add param|=$first-number|
+|add param|=$first-name|
+|check|execute|1|
+|clear params|
+|add param|=$second-number|
+|add param|=$second-name|
+|check|execute|1|
+
+
+{{{=== Check Records ==}}}
+
+|!-B70DBFixture-!|
+|set data source|=$database-source|
+|set sql|!-SELECT * FROM T1;-!|
+|saveSymbol|query|$query|
+|set sql|!-SELECT * FROM T1 ORDER BY i;-!|
+|saveSymbol|query|$ordered-query|
+
+|!-B70RowFixture-!|=$query|
+|i|name|
+|2|=$second-name|
+|=$first-number|First|
+
+|!-B70OrderedRowFixture-!|=$ordered-query||
+|i|name|
+|=$first-number|First|
+|2|$second-name-from-db=|
+
+|!-B70DoFixture-!|
+|check|read|=$second-name-from-db|Second|
+
+
+{{{=== Close Database Source ==}}}
+
+|!-B70DBSourceFixture-!|
+|shutdown data source|=$database-source|

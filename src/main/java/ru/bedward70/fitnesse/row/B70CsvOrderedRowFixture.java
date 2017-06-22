@@ -24,19 +24,7 @@
  */
 package ru.bedward70.fitnesse.row;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-import ru.bedward70.fitnesse.row.data.B70MapData;
-import ru.bedward70.fitnesse.row.data.B70MapDataImpl;
-
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import ru.bedward70.fitnesse.io.B70CsvFixture;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
@@ -47,40 +35,9 @@ public class B70CsvOrderedRowFixture extends B70OrderedRowFixture {
     @Override
     public Object[] query() throws Exception {
 
-        final List<B70MapData> result = new ArrayList<>();
-        final String data = bindArguments.getBindArgs().get(0).toString();
-        final String delimiterString = bindArguments.getBindArgs().get(1).toString();
-        if (delimiterString.length() != 1) {
-            throw new Exception("Expected an one char, but delimiter length = " + delimiterString.length());
-        }
-        final char delimiter = delimiterString.charAt(0);
-        final CSVFormat csvFileFormat = CSVFormat.DEFAULT
-                .withDelimiter(delimiter)
-                .withIgnoreSurroundingSpaces();
-
-        boolean header = true;
-        final Map<Integer,String> headerMap = new HashMap<>();
-        final CSVParser csvFileParser = new CSVParser(new StringReader(data), csvFileFormat);
-        for (CSVRecord record : csvFileParser) {
-            final B70MapDataImpl rowData =  new B70MapDataImpl();
-            if (!header) {
-                result.add(rowData);
-            }
-
-            for (int i = 0; i < record.size(); i++) {
-                String value = record.get(i);
-                if (isNotBlank(value)) {
-                    if (header) {
-                        headerMap.put(i, value);
-                    } else {
-                        if (headerMap.containsKey(i)) {
-                            rowData.put(headerMap.get(i), value);
-                        }
-                    }
-                }
-            }
-            header = false;
-        }
-        return result.toArray();
+        final B70CsvFixture fixture = new B70CsvFixture();
+        fixture.setData(args[0]);
+        fixture.setDelimiter(args[1]);
+        return fixture.query();
     }
 }

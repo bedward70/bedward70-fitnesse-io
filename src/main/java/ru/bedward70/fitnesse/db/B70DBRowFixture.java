@@ -25,16 +25,6 @@
 package ru.bedward70.fitnesse.db;
 
 import ru.bedward70.fitnesse.row.B70RowFixture;
-import ru.bedward70.fitnesse.row.data.B70MapData;
-import ru.bedward70.fitnesse.row.data.B70MapDataImpl;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
@@ -46,27 +36,12 @@ public class B70DBRowFixture extends B70RowFixture {
 
     @Override
     public Object[] query() throws Exception {
-
-        final List<B70MapData> result = new ArrayList<>();
-        final DataSource ds = (DataSource) bindArguments.getBindArgs().get(0);
-        final String sql = bindArguments.getBindArgs().get(1).toString();
-        try (Connection conn = ds.getConnection()) {
-            try (PreparedStatement st = conn.prepareStatement(sql)) {
-                for (int i = 0; i < args.length - REQUERED_PARAMETER_COUNT; i++) {
-                    st.setObject(i + 1, bindArguments.getBindArgs().get(i + REQUERED_PARAMETER_COUNT));
-                }
-                try (ResultSet rs = st.executeQuery()) {
-                    ResultSetMetaData meta = rs.getMetaData();
-                    while (rs.next()) {
-                        final B70MapDataImpl rowData =  new B70MapDataImpl();
-                        for (int i = 0; i < meta.getColumnCount(); i++) {
-                            rowData.put(meta.getColumnName(i + 1).toLowerCase(), rs.getString(i + 1));
-                        }
-                        result.add(rowData);
-                    }
-                }
-            }
+        B70DBFixture fixture = new B70DBFixture();
+        fixture.setDataSource(args[0]);
+        fixture.setSql(args[1]);
+        for (int i = 0; i < args.length - REQUERED_PARAMETER_COUNT; i++) {
+            fixture.addParam(args[i + REQUERED_PARAMETER_COUNT]);
         }
-        return result.toArray();
+        return fixture.query();
     }
 }
