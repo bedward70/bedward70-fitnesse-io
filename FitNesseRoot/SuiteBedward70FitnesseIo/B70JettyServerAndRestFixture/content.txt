@@ -1,0 +1,58 @@
+!define port {9092}
+
+
+|Import|
+|ru.bedward70.fitnesse.io|
+|ru.bedward70.fitnesse.rest|
+|ru.bedward70.fitnesse.server|
+
+CREATE HANDLER
+
+|!-B70HandlerFixture-!|
+|saveSymbol|create|Hello|$handler|
+
+
+START SERVER
+
+|!-B70JettyServerFixture-!|
+|add connector host|localhost|Port|${port}|Idle Timeout|30000|
+|add Context Handler|=$handler|Path|!-/hello-!|
+|saveSymbol|start|$server|
+
+
+REST
+
+|!-B70RestFixture-!|!-http://localhost:-!${port}|!-/{path}-!|
+|add path parameter|hello|
+|saveSymbol|get|$rest-result|
+
+
+GET BODY BYTES
+
+|!-B70OrderedObjectFixture-!|=$rest-result|
+|getBody|
+|$body-bytes=|
+
+
+BODY BYTES TO BODY STRING 
+
+|!-B70EncodingFixture-!|
+|saveSymbol|bytes to string|=$body-bytes|$body-string|
+
+trim BODY STRING 
+
+|!-B70OrderedObjectFixture-!|=$body-string|
+|trim|
+|$body-string-trimmed=|
+
+CHECK
+
+|!-B70DoFixture-!|
+|check|read|=$body-string-trimmed|Hello|
+
+
+
+STOP SERVER
+
+|!-B70JettyServerFixture-!|
+|stop|=$server|

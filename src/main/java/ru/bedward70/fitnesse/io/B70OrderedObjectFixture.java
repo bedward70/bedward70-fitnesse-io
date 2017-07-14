@@ -22,13 +22,28 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package ru.bedward70.fitnesse.row.data;
+package ru.bedward70.fitnesse.io;
+
+import ru.bedward70.fitnesse.io.model.B70MapDataObject;
+import ru.bedward70.fitnesse.row.B70OrderedRowFixture;
+import ru.bedward70.fitnesse.row.data.B70MapData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public interface B70MapData {
+public class B70OrderedObjectFixture extends B70OrderedRowFixture {
 
-    Object get(Object key) throws RuntimeException;
+
+    @Override
+    public Object[] query() throws Exception {
+
+        final List<B70MapData> result = new ArrayList<>();
+        final Object object = bindArguments.getBindArgs().get(0);
+        result.add(new B70MapDataObject(object));
+        return result.toArray();
+    }
 }

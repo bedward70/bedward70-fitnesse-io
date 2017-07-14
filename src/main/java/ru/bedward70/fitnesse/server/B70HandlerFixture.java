@@ -22,13 +22,21 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package ru.bedward70.fitnesse.row.data;
+package ru.bedward70.fitnesse.server;
+
+import org.eclipse.jetty.server.Handler;
+import ru.bedward70.fitnesse.io.B70DoFixture;
+import ru.bedward70.fitnesse.io.parse.B70ParseBinder;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
- *
+ * https://www.leveluplunch.com/java/examples/construct-build-uri/
+ * !!!Warning: it is a draft. Don't use.
  */
-public interface B70MapData {
+public class B70HandlerFixture extends B70DoFixture {
 
-    Object get(Object key) throws RuntimeException;
+    public Handler create(String body) {
+
+        return new B70HelloHandler(B70ParseBinder.create(this, body).getValue().toString());
+    }
 }

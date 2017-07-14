@@ -22,13 +22,32 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-package ru.bedward70.fitnesse.row.data;
+package ru.bedward70.fitnesse.io.model;
+
+import ru.bedward70.fitnesse.row.data.B70MapData;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by Eduard Balovnev on 11.06.17.
  *
  */
-public interface B70MapData {
+public class B70MapDataObject implements B70MapData {
 
-    Object get(Object key) throws RuntimeException;
+    private final Object object;
+
+    public B70MapDataObject(Object object) {
+        this.object = object;
+    }
+
+    @Override
+    public Object get(Object key) throws RuntimeException {
+        Method method = null;
+        try {
+            method = object.getClass().getMethod(key.toString());
+            return method.invoke(object);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
