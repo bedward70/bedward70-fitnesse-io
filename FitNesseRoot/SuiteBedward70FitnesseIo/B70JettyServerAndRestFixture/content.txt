@@ -1,5 +1,6 @@
 !define port {9092}
 
+${key}
 
 |Import|
 |ru.bedward70.fitnesse.io|

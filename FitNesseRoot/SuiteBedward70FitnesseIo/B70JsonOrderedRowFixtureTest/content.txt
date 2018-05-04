@@ -1,0 +1,24 @@
+|Import|
+|ru.bedward70.fitnesse.io|
+|ru.bedward70.fitnesse.row|
+
+READ FILE TO $menu-json symbol
+
+|!-B70FileFixture-!|
+|saveSymbol|readFromFile|testdata/menu.json|$menu-json|
+
+GET menu property
+
+|!-B70JsonOrderedRowFixture-!|=$menu-json|
+|menu|
+|$menu-body-json=|
+
+GET id property
+
+|!-B70JsonOrderedRowFixture-!|=$menu-body-json|
+|id|value|
+|$id-value=|$value-value=|
+
+|!-B70DoFixture-!|
+|check|read|=$id-value|file|
+|check|read|=$value-value|File|
