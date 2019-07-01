@@ -1,0 +1,42 @@
+|Import|
+|ru.bedward70.fitnesse.io|
+|ru.bedward70.fitnesse.io.clazz|
+
+Create an Integer as new Integer("20071226")
+
+|!-B70ClassDoFixture-!|
+|show|set class|java.lang.Integer|
+|check|add param|20071226|true|
+|saveSymbol|create instance|$integer|
+
+Read $integer symbol
+
+|!-B70DoFixture-!|
+|check|read|=$integer|20071226|
+|show|read|=$integer|
+
+Create an Integer as Integer.valueOf("19941001")
+
+|!-B70ClassDoFixture-!|
+|show|set class|java.lang.Integer|
+|check|add param|19941001|true|
+|saveSymbol|method|valueOf|$integer|
+
+Read $integer symbol
+
+|!-B70DoFixture-!|
+|check|read|=$integer|19941001|
+|show|read|=$integer|
+
+
+Create an AtomicInteger as new AtomicInteger()
+
+|!-B70ClassDoFixture-!|
+|show|set class|java.util.concurrent.atomic.AtomicInteger|
+|saveSymbol|create instance|$atomic_integer|
+
+Increment Atomic to 1
+
+|!-B70ClassDoFixture-!|
+|show|set|=$atomic_integer|
+|check|method|incrementAndGet|1|
